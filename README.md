@@ -1,6 +1,8 @@
 Twitch API Proxy
---
-A node/express "proxy" for Twitch API calls that will also handle Twitch OAuth.
+----------------
+![Release](https://github.com/mrgoodbytes8667/twitchapiproxy/workflows/Release/badge.svg)
+
+A node/express "proxy" for Twitch API calls that will also handle Twitch OAuth.  
 
 ## Setup
 - Before you begin, this assumes you have Node v10 or higher along with npm or yarn.
