@@ -1,4 +1,12 @@
+/**
+ * Get config values from config.json
+ */
 let {clientId, clientSecret, refreshToken, port, scopes} = require('./config.json');
+
+/**
+ * Build yargs command line argument settings
+ * @type {Object | {port: ?number, clientId: ?string, clientSecret: ?string, scopes: ?string[], refreshToken: ?string}}
+ */
 const argv = require('yargs')
     .option('port', {
         type: 'number',
@@ -20,7 +28,7 @@ const argv = require('yargs')
         type: 'string',
         description: 'Twitch Refresh Token'
     }).check((argv) => {
-        if(argv.port <= 1023 || argv.port > 65535) {
+        if (argv.port <= 1023 || argv.port > 65535) {
             throw new Error('Port is not valid');
         }
         return true;
@@ -52,77 +60,61 @@ const state = cryptoRandomString({length: 30, type: 'url-safe'});
 if (argv.port) {
     port = argv.port;
 }
-if(argv.clientId) {
+if (argv.clientId) {
     clientId = argv.clientId;
 }
-if(argv.clientSecret) {
+if (argv.clientSecret) {
     clientSecret = argv.clientSecret;
 }
-if(argv.scopes && argv.scopes.length > 0) {
+if (argv.scopes && argv.scopes.length > 0) {
     scopes = argv.scopes.join(' ');
 }
-if(argv.refreshToken) {
+if (argv.refreshToken) {
     refreshToken = argv.refreshToken;
 }
 
 /**
- * Listen for helix endpoint GET methods
+ * Listen for plain helix endpoint GET methods
  */
 app.get("/helix/*", (request, response) => {
-    let status = 200;
-    fetch('https://api.twitch.tv' + request.url, {
-        headers: {
-            'Authorization': 'Bearer ' + token,
-            'Client-Id': clientId
-        }
-    })
-        .then(res => {
-            status = res.status;
-            return res.json();
-        })
-        .then(res => {
-            response.status(status);
-            response.json(res);
-        })
-        .catch(err => {
-            console.error(err);
-            response.json(err);
-        });
+    route(response, request.url, 'helix');
 });
 
 /**
- * Listen for kraken endpoint GET methods
+ * Listen for plain kraken endpoint GET methods
  */
 app.get("/kraken/*", (request, response) => {
-    let status = 200;
-    fetch('https://api.twitch.tv' + request.url, {
-        headers: {
-            'Accept': 'application/vnd.twitchtv.v5+json',
-            'Authorization': 'OAuth ' + token,
-            'Client-ID': clientId
-        }
-    })
-        .then(res => {
-            status = res.status;
-            return res.json();
-        })
-        .then(res => {
-            response.status(status);
-            response.json(res);
-        })
-        .catch(err => {
-            console.error(err);
-            response.json(err);
-        });
+    route(response, request.url, 'kraken');
+});
+
+/**
+ * Listen for helix endpoint methods
+ */
+app.get("/:method/helix/*", (request, response) => {
+    route(response, request.url, 'helix');
+});
+
+/**
+ * Listen for kraken endpoint methods
+ */
+app.get("/:method/kraken/*", (request, response) => {
+    route(response, request.url, 'kraken');
 });
 
 /**
  * Listen for the Twitch OAuth call
  */
 app.get("/auth/twitch", (request, response) => {
-    response.redirect('https://id.twitch.tv/oauth2/authorize?client_id=' + clientId +
-        '&redirect_uri=' + callback + '&state=' + state +
-        '&response_type=' + scopes);
+    let url = new URL('https://id.twitch.tv/oauth2/authorize');
+    const params = new URLSearchParams({
+        'client_id': clientId,
+        'redirect_uri': callback,
+        'response_type': 'code',
+        'scope': scopes,
+        'state': state,
+    });
+    url.search = params.toString();
+    response.redirect(url.toString());
 });
 
 /**
@@ -133,9 +125,16 @@ app.get("/auth/twitch/callback", (request, response) => {
         response.status(400);
         response.json({'error': 'Invalid state'});
     } else {
-
-        fetch('https://id.twitch.tv/oauth2/token?client_id=' + clientId +
-            '&client_secret=' + clientSecret + '&code=' + request.query.code + '&grant_type=authorization_code&redirect_uri=' + callback, {
+        let url = new URL('https://id.twitch.tv/oauth2/token');
+        const params = new URLSearchParams({
+            'client_id': clientId,
+            'client_secret': clientSecret,
+            'code': request.query.code,
+            'grant_type': 'authorization_code',
+            'redirect_uri': callback
+        });
+        url.search = params.toString();
+        fetch(url.toString(), {
             method: 'POST'
         })
             .then(res => res.json())
@@ -158,17 +157,17 @@ app.get("/auth/twitch/callback", (request, response) => {
                     '    <main role="main" class="container">\n' +
                     '  <div class="jumbotron">\n' +
                     '    <h1>Success!</h1>\n' +
-                    '    <p>Copy the code <code>' + res.refresh_token + '</code> into the file <var>config.json</var> in the <code>refreshToken</code> field and restart this service.</p>\n' +
+                    '    <p>Copy the code "<code>' + res.refresh_token + '</code>" into the file <var>config.json</var> in the <code>refreshToken</code> field and restart this service.</p>\n' +
                     '  </div>\n' +
                     '  <div>\n' +
                     '    <p>Full response:</p>\n' +
                     '    <pre><code>' +
-                        JSON.stringify(res)
-                            .replace(/,/g, ",\n")
-                            .replace('{', '{\n')
-                            .replace('}', '\n}')
-                            .replace('[', '[\n')
-                            .replace(']', '\n]') +
+                    JSON.stringify(res)
+                        .replace(/,/g, ",\n")
+                        .replace('{', '{\n')
+                        .replace('}', '\n}')
+                        .replace('[', '[\n')
+                        .replace(']', '\n]') +
                     '</code></pre>\n' +
                     '  </div>\n' +
                     '</main>\n' +
@@ -191,7 +190,7 @@ app.get("/auth/twitch/callback", (request, response) => {
 // listen for requests :)
 const listener = app.listen(port, () => {
     console.log("Your app is listening on port " + listener.address().port);
-    callback = encodeURIComponent('http://localhost:' + listener.address().port + '/auth/twitch/callback');
+    callback = 'http://localhost:' + listener.address().port + '/auth/twitch/callback';
     if (refreshToken !== '') {
         doTokenRefresh();
         setInterval(doTokenRefresh, 3 * 3600 * 1000);
@@ -203,8 +202,15 @@ const listener = app.listen(port, () => {
  * @return {Promise<* | string>}
  */
 async function doTokenRefresh() {
-    return fetch('https://id.twitch.tv/oauth2/token?grant_type=refresh_token&refresh_token=' + refreshToken +
-        '&client_id=' + clientId + '&client_secret=' + clientSecret, {
+    let url = new URL('https://id.twitch.tv/oauth2/token');
+    const params = new URLSearchParams({
+        'grant_type': 'refresh_token',
+        'refresh_token': refreshToken,
+        'client_id': clientId,
+        'client_secret': clientSecret
+    });
+    url.search = params.toString();
+    return fetch(url.toString(), {
         method: 'POST'
     })
         .then(res => res.json())
@@ -215,4 +221,120 @@ async function doTokenRefresh() {
         .catch(err => {
             return JSON.stringify(err);
         });
+}
+
+/**
+ * Helix endpoint headers
+ * @return {{Authorization: string, "Client-Id": (string)}}
+ */
+function helixHeaders() {
+    return {
+        'Authorization': 'Bearer ' + token,
+        'Client-Id': clientId
+    };
+}
+
+/**
+ * Kraken endpoint headers
+ * @return {{Authorization: string, Accept: string, "Client-ID": string}}
+ */
+function krakenHeaders() {
+    return {
+        'Accept': 'application/vnd.twitchtv.v5+json',
+        'Authorization': 'OAuth ' + token,
+        'Client-ID': clientId
+    };
+}
+
+/**
+ *
+ * @param {Response} response
+ * @param {string} url
+ * @param {string} api helix or kraken
+ */
+function route(response, url, api) {
+    const parsed = parseEndpoint(url);
+    let status = 200;
+    let headers = helixHeaders();
+    if (api === 'kraken') {
+        headers = krakenHeaders();
+    }
+    let opts = {
+        headers: headers,
+        method: parsed.method
+    };
+    if (parsed.body !== '' && parsed.method !== 'GET') {
+        opts['body'] = parsed.body;
+        opts['headers']['Content-Type'] = 'application/json';
+    }
+    console.log(opts);
+    fetch('https://api.twitch.tv' + parsed.endpoint, opts)
+        .then(res => {
+            status = res.status;
+            return res.json();
+        })
+        .then(res => {
+            response.status(status);
+            response.json(res);
+        })
+        .catch(err => {
+            console.error(err);
+            response.json(err);
+        });
+}
+
+/**
+ *
+ * @param {string} endpoint
+ * @return {{endpoint: string, method: string, body: string}}
+ */
+function parseEndpoint(endpoint) {
+    const url = new URL(endpoint, 'http://localhost');
+    let parts = url.pathname.split('/');
+    parts.shift();
+    let method = 'GET';
+    switch (parts[0]) {
+        case 'helix':
+        case 'kraken':
+            break;
+        default:
+            method = parts.shift().toUpperCase();
+            break;
+    }
+
+    const test = url.search;
+    const regex = RegExp('body-*');
+    let params = new URLSearchParams();
+    let body = {};
+    let hasBody = false;
+    if (regex.test(test)) {
+        url.searchParams.forEach(function (value, key) {
+            if (key.startsWith('body-')) {
+                body[key.slice(5)] = value;
+                hasBody = true;
+            } else {
+                params.append(key, value);
+            }
+        });
+    } else {
+        params = url.searchParams;
+    }
+
+    if (hasBody === true) {
+        body = JSON.stringify(body);
+    } else {
+        body = '';
+    }
+
+    let r = '/' + parts.join('/');
+    const queryString = params.toString();
+    if (queryString !== '') {
+        r += '?' + queryString;
+    }
+
+    return {
+        'method': method,
+        'endpoint': r,
+        'body': body
+    };
 }
