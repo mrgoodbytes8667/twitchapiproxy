@@ -16,7 +16,6 @@ A node/express "proxy" for Twitch API calls that will also handle Twitch OAuth.
 - Add every [scope](https://dev.twitch.tv/docs/authentication#scopes) needed from Twitch space separated (ex. `user:read:email clips:edit`)  
   - **_You should only include scopes you actually need!_**  
   - You need a minimum of one scope
-  - You can mix and match helix and kraken scopes
 - Start the server via `npm start` or `yarn start`
 - Navigate to the Twitch authentication URL: http://localhost:58667/auth/twitch  
   Login to Twitch and click Authorize
