@@ -1,0 +1,7 @@
+{
+  "clientId": "abc123",
+  "clientSecret": "abc123",
+  "port": "58667",
+  "refreshToken": "abc123",
+  "scopes": "user:read:email"
+}
