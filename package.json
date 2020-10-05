@@ -3,15 +3,29 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "node server.js"
+    "setup": "node ./bin/www --setup",
+    "start": "node ./bin/www",
+    "prod": "rm -Rf public/stylesheets/fontawesome && mkdir -p public/stylesheets/fontawesome/scss && mkdir -p public/stylesheets/fontawesome/webfonts && cp -r node_modules/@fortawesome/fontawesome-free/scss public/stylesheets/fontawesome && cp -r node_modules/@fortawesome/fontawesome-free/webfonts public/stylesheets/fontawesome && cp node_modules/jquery/dist/jquery.min.js public/javascripts/jquery.min.js && cp node_modules/bootstrap/dist/js/bootstrap.min.js public/javascripts/bootstrap.min.js && cp node_modules/popper.js/dist/popper.min.js public/javascripts/popper.min.js"
   },
   "dependencies": {
+    "bootstrap": "^4.5.0",
+    "bootswatch": "^4.5.0",
+    "cookie-parser": "~1.4.4",
     "crypto-random-string": "^3.3.0",
+    "debug": "~2.6.9",
     "express": "^4.17.1",
+    "highlight.js": "^10.2.1",
+    "http-errors": "~1.6.3",
+    "morgan": "~1.9.1",
     "node-fetch": "^2.6.1",
+    "node-sass-middleware": "0.11.0",
+    "twig": "~0.10.3",
     "yargs": "^15.4.1"
   },
   "devDependencies": {
-    "@types/yargs": "^15.0.7"
+    "@fortawesome/fontawesome-free": "^5.12.1",
+    "@types/yargs": "^15.0.7",
+    "jquery": "^3.5.1",
+    "popper.js": "^1.16.0"
   }
 }
