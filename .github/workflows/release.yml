@@ -18,25 +18,44 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Make Release Folder
-        run: mkdir release
+        if: success()
+        id: make-release-folder
+        run: mkdir -p release
 
       - uses: actions/checkout@v2
+        if: success()
+        id: checkout
         with:
           path: release
 
       - name: Copy Config File
+        if: success()
+        id: copy-config-file
         run: cp release/config.sample.json release/config.json
 
-      - name: Remove .github
+      - name: Remove .git* files and folders
+        if: success()
+        id: remove-git-files
         run: rm -Rf release/.github && rm -Rf release/.git && rm release/.gitignore
 
       - uses: actions/upload-artifact@v2
+        if: success()
+        id: upload-artifact
         with:
           name: release
           path: release/
 
+      - name: Zip release folder
+        if: success()
+        id: zip-release-folder
+        run: |
+          cd release
+          zip -r ../release.zip *
+          cd ../
+
       - name: Create Release
-        id: create_release
+        if: success()
+        id: create-release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
@@ -61,7 +80,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
+          upload_url: ${{ steps.create-release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps
           asset_path: release.zip
           asset_name: release.zip
           asset_content_type: application/zip

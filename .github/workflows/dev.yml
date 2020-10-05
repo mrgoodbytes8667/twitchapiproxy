@@ -4,7 +4,7 @@ name: Dev
 # events but only for the main branch
 on:
   push:
-    branches: [ 1.1 ]
+    branches: [ dev ]
   workflow_dispatch: []
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -29,7 +29,11 @@ jobs:
       - name: Remove .github
         run: rm -Rf release/.github && rm -Rf release/.git && rm release/.gitignore
 
+      - name: Zip release folder
+        run: |
+          zip -r release.zip release
+
       - uses: actions/upload-artifact@v2
         with:
-          name: release
-          path: release/
+          name: release.zip
+          path: release.zip
