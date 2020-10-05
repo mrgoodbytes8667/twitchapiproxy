@@ -1,0 +1,54 @@
+$twitch: #9146FF;
+$twitch-old: #6441A4;
+$twitch-old-hover: #4b367c;
+$twitch-dragon: #8205B4;
+$twitch-nights: #41145F;
+$twitch-sniper: #FA2828;
+$twitch-zero: #1E69FF;
+$twitch-osu: #BE0078;
+
+.btn-twitch {
+  color: $white;
+  background-color: $twitch-old !important;
+}
+
+.btn-twitch:hover {
+  color: $white;
+  background: $twitch-old-hover !important;
+}
+
+.btn-twitch-white {
+  color: $twitch-old;
+  background-color: $white;
+}
+
+.btn-twitch-white:hover {
+  color: $twitch-old-hover;
+  background: #eee;
+}
+
+.bg-twitch {
+  background-color: $twitch-old;
+}
+
+.text-twitch {
+  color: $twitch;
+}
+
+.text-twitch-accent-zero {
+  color: $twitch-zero;
+}
+
+.text-twitch-accent-sniper {
+  color: $twitch-sniper;
+}
+
+.btn-twitch-osu {
+  color: $white;
+  background-color: $twitch-osu !important;
+}
+
+.btn-twitch-osu:hover {
+  color: $white;
+  background-color: #BE0038 !important;
+}

@@ -1,0 +1,203 @@
+{% extends 'layout.twig' %}
+
+{% block body %}
+    <main role="main" class="container">
+        <h1><span class="fab fa-twitch" aria-hidden="true"></span> OAuth</h1>
+        <form>
+            <h3>Application Info</h3>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="client-id">Client ID</label>
+                    <input type="text" id="client-id" class="form-control" value="{{ clientId }}" disabled>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="redirect">Redirect</label>
+                    <input type="url" id="redirect" class="form-control" value="{{ callbackUrl }}"
+                           disabled>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="client-secret">Client Secret</label>
+                    <input type="password" id="client-secret" class="form-control" value="{{ clientSecret }}" disabled
+                           aria-describedby="clientSecretHelpBlock">
+                    <small id="clientSecretHelpBlock" class="form-text text-muted">
+                        You must keep this confidential.
+                    </small>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="state">State</label>
+                    <input type="text" id="state" class="form-control" value="{{ state }}" disabled
+                           aria-describedby="stateHelpBlock">
+                    <small id="stateHelpBlock" class="form-text text-muted">
+                        A randomly generated value that will be passed through to Twitch. It will be verified when Twitch
+                        returns control to us to ensure you haven not been hijacked.
+                    </small>
+                </div>
+            </div>
+            <h3>Scopes</h3>
+            <p class="lead">Applications should request the appropriate scopes for the intended target API only. Failure to adhere to these guidelines may result in the suspension of your application’s access to the Twitch API. (per <a href="https://dev.twitch.tv/docs/authentication/#registration">Twitch API Documentation</a>)</p>
+            <div class="form-group">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="analytics-read-extensions">
+                    <label class="form-check-label row" for="analytics-read-extensions">
+                        <div class="col-sm-3"><code>analytics:read:extensions</code></div>
+                        <div class="col-sm-9">View analytics data for your extensions.</div>
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="analytics-read-games">
+                    <label class="form-check-label row" for="analytics-read-games">
+                        <div class="col-sm-3"><code>analytics:read:games</code></div>
+                        <div class="col-sm-9">View analytics data for your games.</div>
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="bits-read">
+                    <label class="form-check-label row" for="bits-read">
+                        <div class="col-sm-3"><code>bits:read</code></div>
+                        <div class="col-sm-9">View Bits information for your channel.</div>
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="channel-edit-commercial">
+                    <label class="form-check-label row" for="channel-edit-commercial">
+                        <div class="col-sm-3"><code>channel:edit:commercial</code></div>
+                        <div class="col-sm-9">Run commercials on a channel.</div>
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="channel-manage-broadcast">
+                    <label class="form-check-label row" for="channel-manage-broadcast">
+                        <div class="col-sm-3"><code>channel:manage:broadcast</code></div>
+                        <div class="col-sm-9">
+                            Manage your channel’s broadcast configuration, including updating channel configuration and
+                            managing stream markers and stream tags.
+                        </div>
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="channel-manage-extension">
+                    <label class="form-check-label row" for="channel-manage-extension">
+                        <div class="col-sm-3"><code>channel:manage:extension</code></div>
+                        <div class="col-sm-9">
+                            Manage your channel’s extension configuration, including activating extensions.
+                        </div>
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="channel-read-hype_train">
+                    <label class="form-check-label row" for="channel-read-hype_train">
+                        <div class="col-sm-3"><code>channel:read:hype_train</code></div>
+                        <div class="col-sm-9">Gets the most recent hype train on a channel.</div>
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="channel-read-stream_key">
+                    <label class="form-check-label row" for="channel-read-stream_key">
+                        <div class="col-sm-3"><code>channel:read:stream_key</code></div>
+                        <div class="col-sm-9">Read an authorized user’s stream key.</div>
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="channel-read-subscriptions">
+                    <label class="form-check-label row" for="channel-read-subscriptions">
+                        <div class="col-sm-3"><code>channel:read:subscriptions</code></div>
+                        <div class="col-sm-9">
+                            Get a list of all subscribers to your channel and check if a user is subscribed to your channel
+                        </div>
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="clips-edit">
+                    <label class="form-check-label row" for="clips-edit">
+                        <div class="col-sm-3"><code>clips:edit</code></div>
+                        <div class="col-sm-9">Manage a clip object.</div>
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="user-edit">
+                    <label class="form-check-label row" for="user-edit">
+                        <div class="col-sm-3"><code>user:edit</code></div>
+                        <div class="col-sm-9">Manage a user object.</div>
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="user-edit-follows">
+                    <label class="form-check-label row" for="user-edit-follows">
+                        <div class="col-sm-3"><code>user:edit:follows</code></div>
+                        <div class="col-sm-9">Edit your follows.</div>
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="user-read-broadcast">
+                    <label class="form-check-label row" for="user-read-broadcast">
+                        <div class="col-sm-3"><code>user:read:broadcast</code></div>
+                        <div class="col-sm-9">
+                            View your broadcasting configuration, including extension configurations.
+                        </div>
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="user-read-email">
+                    <label class="form-check-label row" for="user-read-email">
+                        <div class="col-sm-3"><code>user:read:email</code></div>
+                        <div class="col-sm-9">Read an authorized user’s email address.</div>
+                    </label>
+                </div>
+            </div>
+        </form>
+        <a class="btn btn-twitch" href="#" role="button" id="continue"><span class="fab fa-twitch" aria-hidden="true"></span> Continue</a>
+        <hr>
+        <h3>Extra</h3>
+        <div>
+            <p>To use the scopes checked above by default going forward, paste the following into <code>scopes</code> inside
+                <code>config.json</code></p>
+            <kbd id="scopes"></kbd>
+        </div>
+    </main>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(function () {
+            var scopes = "{{ scopes }}";
+            scopes = scopes.replace(/:/g, "-");
+            scopes = scopes.split(" ");
+            scopes.forEach(value => {
+                $("#" + value).prop("checked", true);
+            });
+
+            $("input:checkbox").change(
+                function () {
+                    checkboxes();
+                });
+
+            checkboxes();
+
+        });
+
+        function checkboxes() {
+            scopes = "";
+            $("input:checkbox").each(function () {
+                if ($(this).is(":checked")) {
+                    scopes += " " + $(this).attr("id");
+                }
+            });
+            scopes = scopes.replace(/\-/g, ":").trim();
+            $("#scopes").text(scopes);
+            let url = new URL("https://id.twitch.tv/oauth2/authorize");
+            const params = new URLSearchParams({
+                "client_id": "{{ clientId }}",
+                "redirect_uri": "{{ callbackUrl }}",
+                "response_type": "code",
+                "scope": scopes,
+                "state": "{{ state }}",
+            });
+            url.search = params.toString();
+
+            $("#continue").attr("href", url.toString());
+        }
+    </script>
+{% endblock %}

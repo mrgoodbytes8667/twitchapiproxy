@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    {% block stylesheets %}
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="/stylesheets/style.css">
+    {% endblock %}
+
+    <title>{{ title }}</title>
+</head>
+<body>
+
+<div class="wrapper flex-grow-1">
+    <nav class="navbar navbar-expand-sm navbar-dark bg-twitch sticky-top mb-3">
+        <a class="navbar-brand" href="/"><span class="fab fa-twitch"
+                                               aria-hidden="true"></span> Twitch API Proxy </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse-button"
+                aria-controls="navbar-collapse-button" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-button">
+            <div class="navbar-nav mr-auto">
+                <a class="nav-link"
+                   href="/">
+                    <span class="fas fa-home" aria-hidden="true"></span> Auth</a>
+            </div>
+        </div>
+    </nav>
+</div>
+{% block body %}{% endblock %}
+
+{% block javascripts %}
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="/javascripts/jquery.min.js"></script>
+    <script src="/javascripts/popper.min.js"></script>
+    <script src="/javascripts/bootstrap.min.js"></script>
+{% endblock %}
+</body>
+</html>

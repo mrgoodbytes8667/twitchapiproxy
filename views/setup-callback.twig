@@ -1,0 +1,41 @@
+{% extends 'layout.twig' %}
+
+{% block body %}
+    <br>
+    <main role="main" class="container">
+        <div class="jumbotron">
+            <h1>Success!</h1>
+            <p>Copy the code "<code>{{ refreshToken }}</code>" into the file <var>config.json</var> in the <code>refreshToken</code>
+                field and restart this service.</p>
+        </div>
+        <div>
+            <p>
+                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#full-response-collapse"
+                        aria-expanded="false" aria-controls="full-response-collapse">
+                    Full Response <span id="chevron" class="fas fa-chevron-circle-down" aria-hidden="true"></span>
+                </button>
+            </p>
+            <div class="collapse" id="full-response-collapse">
+                <div class="card card-body">
+                    <pre><code>{{ resStringified }}</code></pre>
+                </div>
+            </div>
+
+        </div>
+    </main>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(function () {
+            var $collapse = $('#full-response-collapse');
+            $collapse.on('shown.bs.collapse', function () {
+                $("#chevron").removeClass("fa-chevron-circle-down").addClass("fa-chevron-circle-up");
+            });
+            $collapse.on('hidden.bs.collapse', function () {
+                $("#chevron").removeClass("fa-chevron-circle-up").addClass("fa-chevron-circle-down");
+            });
+        });
+    </script>
+{% endblock %}

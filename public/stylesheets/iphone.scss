@@ -1,0 +1,16 @@
+// iPhone X Support
+// m#{a}x is a workaround for the word max which SASS does not support
+// https://github.com/webpack-contrib/sass-loader/issues/528
+@supports (padding: m#{a}x(0px)) {
+  .navbar {
+    padding-left: m#{a}x(16px, env(safe-area-inset-left));
+    padding-right: m#{a}x(16px, env(safe-area-inset-right));
+  }
+
+  .container {
+    padding-left: m#{a}x(15px, env(safe-area-inset-left));
+    padding-right: m#{a}x(15px, env(safe-area-inset-right));
+  }
+}
+
+// End iPhone X Support

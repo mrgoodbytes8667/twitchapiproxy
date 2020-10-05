@@ -1,6 +1,6 @@
 Twitch API Proxy
 ----------------
-![Release](https://github.com/mrgoodbytes8667/twitchapiproxy/workflows/Release/badge.svg)
+![Release](https://github.com/mrgoodbytes8667/twitchapiproxy/workflows/Release/badge.svg) ![Dev](https://github.com/mrgoodbytes8667/twitchapiproxy/workflows/Dev/badge.svg)
 
 A node/express "proxy" for Twitch API calls that will also handle Twitch OAuth.  
 
