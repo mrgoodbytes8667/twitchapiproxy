@@ -30,13 +30,16 @@
                     <input type="text" id="state" class="form-control" value="{{ state }}" disabled
                            aria-describedby="stateHelpBlock">
                     <small id="stateHelpBlock" class="form-text text-muted">
-                        A randomly generated value that will be passed through to Twitch. It will be verified when Twitch
-                        returns control to us to ensure you haven not been hijacked.
+                        A randomly generated value that will be passed through to Twitch. It will be verified when
+                        Twitch returns control to us to ensure you haven not been hijacked.
                     </small>
                 </div>
             </div>
             <h3>Scopes</h3>
-            <p class="lead">Applications should request the appropriate scopes for the intended target API only. Failure to adhere to these guidelines may result in the suspension of your application’s access to the Twitch API. (per <a href="https://dev.twitch.tv/docs/authentication/#registration">Twitch API Documentation</a>)</p>
+            <p class="lead">Applications should request the appropriate scopes for the intended target API only. Failure
+                to adhere to these guidelines may result in the suspension of your application’s access to the Twitch
+                API. (per <a href="https://dev.twitch.tv/docs/authentication/#registration">Twitch API Documentation</a>)
+            </p>
             <div class="form-group">
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" value="" id="analytics-read-extensions">
@@ -104,7 +107,8 @@
                     <label class="form-check-label row" for="channel-read-subscriptions">
                         <div class="col-sm-3"><code>channel:read:subscriptions</code></div>
                         <div class="col-sm-9">
-                            Get a list of all subscribers to your channel and check if a user is subscribed to your channel
+                            Get a list of all subscribers to your channel and check if a user is subscribed to your
+                            channel
                         </div>
                     </label>
                 </div>
@@ -147,13 +151,17 @@
                 </div>
             </div>
         </form>
-        <a class="btn btn-twitch" href="#" role="button" id="continue"><span class="fab fa-twitch" aria-hidden="true"></span> Continue</a>
+        <a class="btn btn-twitch" href="#" role="button" id="continue"><span class="fab fa-twitch"
+                                                                             aria-hidden="true"></span> Continue</a>
         <hr>
         <h3>Extra</h3>
         <div>
-            <p>To use the scopes checked above by default going forward, paste the following into <code>scopes</code> inside
-                <code>config.json</code></p>
-            <kbd id="scopes"></kbd>
+            <div class="card card-body">
+                <p>To use the scopes checked above by default going forward, paste the following into
+                    <code>scopes</code> inside
+                    <code>config.json</code></p>
+                <kbd id="scopes"></kbd>
+            </div>
         </div>
     </main>
 {% endblock %}

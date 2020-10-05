@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "setup": "node ./bin/www --setup",
     "start": "node ./bin/www",
     "prod": "rm -Rf public/stylesheets/fontawesome && mkdir -p public/stylesheets/fontawesome/scss && mkdir -p public/stylesheets/fontawesome/webfonts && cp -r node_modules/@fortawesome/fontawesome-free/scss public/stylesheets/fontawesome && cp -r node_modules/@fortawesome/fontawesome-free/webfonts public/stylesheets/fontawesome && cp node_modules/jquery/dist/jquery.min.js public/javascripts/jquery.min.js && cp node_modules/bootstrap/dist/js/bootstrap.min.js public/javascripts/bootstrap.min.js && cp node_modules/popper.js/dist/popper.min.js public/javascripts/popper.min.js"
   },

@@ -7,9 +7,13 @@ let {clientId, clientSecret, refreshToken, port, scopes} = require('./../config.
 
 /**
  * Build yargs command line argument settings
- * @type {Object | {port: ?number, clientId: ?string, clientSecret: ?string, scopes: ?string[], refreshToken: ?string}}
+ * @type {Object | {port: ?number, clientId: ?string, clientSecret: ?string, scopes: ?string[], refreshToken: ?string, setup: boolean}}
  */
 const argv = require('yargs')
+    .option('setup', {
+        type: "boolean",
+        description: 'Include setup routes for first time Twitch authentication?'
+    })
     .option('port', {
         type: 'number',
         description: 'The port to run on'
@@ -64,5 +68,6 @@ module.exports = {
      * State variable to prevent forgeries
      * @type {string | *}
      */
-    state: cryptoRandomString({length: 30, type: 'url-safe'})
+    state: cryptoRandomString({length: 30, type: 'url-safe'}),
+    setup: argv.setup === true
 };
